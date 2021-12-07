@@ -22,13 +22,15 @@ module ContactsRspec3Rails41
 
     config.generators do |g|
       g.test_framework :rspec,
-        fixtures: true,
-        view_specs: false,
-        helper_specs: false,
-        routing_specs: false,
-        controller_specs: true,
-        request_specs: false
-      g.fixture_replacement :factory_girl, dir: "spec/factories"
+        fixtures: true, #true specifies to generate a fixture for each model
+        view_specs: false, #false says to skip generating view specs.
+        helper_specs: false, #false skips generating specs for the helper files Rails generates with each controller.
+        routing_specs: false, #false omits a spec file for your config/routes.rb file. If your application is simple,
+                              #as the one in this book will be, you’re probably safe skipping these specs. As your 
+                              #application grows, however, and takes on more complex routing, it’s a good idea to incorporate routing specs
+        controller_specs: true, 
+        request_specs: false #false skips RSpec’s defaults for adding integration-level specs in spec/requests
+      g.fixture_replacement :factory_girl, dir: "spec/factories" #:factory_girl tells Rails to generate factories instead of fixtures, and to save them in the spec/factories directory.
     end
   end
 end
