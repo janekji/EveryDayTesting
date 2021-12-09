@@ -3,29 +3,33 @@ require 'rails_helper'
 RSpec.describe ContactsController, type: :controller do
   
   describe 'Get #index' do
-    
+    let!(:smith) { create(:contact, lastname: "Smith") }
+    let!(:jones) { create(:contact, lastname: "Jones") }
+
     context 'with params[:letter]' do
       it "populates an array of contacts starting with the letter" do
-        smith = create(:contact, lastname: "Smith")
-        jones = create(:contact, lastname: "Jones")
         get :index, letter: "S"
+
         expect(assigns(:contacts)).to match_array([smith])
       end
+
       it "render the :index template" do
         get :index, letter: "S"
+
         expect(response).to render_template :index
       end
     end
     
     context 'without params[:letter]' do
       it "populates an array of all contacts" do
-        smith = create(:contact, lastname: "Smith")
-        jones = create(:contact, lastname: "Jones")
         get :index
+
         expect(assigns(:contacts)).to match_array([smith,jones])
       end
+
       it "renders the :index template" do
         get :index
+
         expect(response).to render_template :index
       end
     end
@@ -35,12 +39,14 @@ RSpec.describe ContactsController, type: :controller do
     it "assigns the requested contact to @contact" do
       contact = create(:contact)
       get :show, id: contact
+
       expect(assigns(:contact)).to eq contact
     end
     
     it "renders the :show template" do
       contact = create(:contact)
       get :show, id: contact
+
       expect(response).to render_template :show
     end
   end
@@ -49,11 +55,14 @@ RSpec.describe ContactsController, type: :controller do
     it "assigns a new Contact to @contact" do
       contact = create(:contact)
       get :edit, id: contact
+
       expect(assigns(:contact)).to eq contact
     end
+
     it "renders the :new template" do
       contact = create(:contact)
       get :edit, id:contact
+
       expect(response).to render_template :edit
     end
   end
@@ -78,10 +87,12 @@ RSpec.describe ContactsController, type: :controller do
             phones_attributes: @phones)
           }.to change(Contact, :count).by(1)
         end
+
         it "redirects to contacts#show" do
           post :create, contact: attributes_for(:contact,
             phones_attributes: @phones)
-            expect(response).to redirect_to contact_path(assigns[:contact])
+
+          expect(response).to redirect_to contact_path(assigns[:contact])
           end
         end
         
@@ -92,9 +103,11 @@ RSpec.describe ContactsController, type: :controller do
               contact: attributes_for(:invalid_contact)
             }.not_to change(Contact, :count)
           end
+
           it "re-renders the :new template" do
             post :create,
-            contact: attributes_for(:invalid_contact)
+              contact: attributes_for(:invalid_contact)
+
             expect(response).to render_template :new
           end
         end 
@@ -110,20 +123,24 @@ RSpec.describe ContactsController, type: :controller do
           context "with valid attributes" do
             it "updates the contact in the database" do
               patch :update, id: @contact, contact: attributes_for(:contact)
+
               expect(assigns(:contact)).to eq(@contact)
             end
+
             it "changes @contact's attributes" do
               patch :update, id: @contact,
               contact: attributes_for(:contact,
                 firstname: "Larry",
                 lastname: "Smith")
                 @contact.reload
+
                 expect(@contact.firstname).to eq("Larry")
                 expect(@contact.lastname).to eq("Smith")
               end
               
               it "redirects to the updated contact" do
                 patch :update, id: @contact, contact: attributes_for(:contact)
+
                 expect(response).to redirect_to @contact
               end
             end
@@ -135,12 +152,15 @@ RSpec.describe ContactsController, type: :controller do
                   firstname: "Larry",
                   lastname: nil)
                   @contact.reload
+
                   expect(@contact.firstname).to_not eq("Larry")
                   expect(@contact.lastname).to eq("Smith")
                 end
+
                 it "re-renders the :edit template" do
                   patch :update, id: @contact,
                   contact: attributes_for(:invalid_contact)
+
                   expect(response).to render_template :edit
                 end
               end
@@ -155,8 +175,10 @@ RSpec.describe ContactsController, type: :controller do
                   delete :destroy, id: @contact
                 }.to change(Contact, :count).by(-1)
               end
+
               it "redirects to users#index" do
               delete :destroy, id: @contact
+
               expect(response).to redirect_to contacts_url
               end
             end
