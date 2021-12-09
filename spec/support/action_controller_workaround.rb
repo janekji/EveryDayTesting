@@ -1,7 +1,5 @@
 # a workaround to avoid MonitorMixin double-initialize error
 # https://github.com/rails/rails/issues/34790#issuecomment-681034561
-require 'pry'
-binding.pry
 if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('2.6.0')
   if Gem::Version.new(Rails.version) < Gem::Version.new('5.0.0')
     class ActionController::TestResponse < ActionDispatch::TestResponse
