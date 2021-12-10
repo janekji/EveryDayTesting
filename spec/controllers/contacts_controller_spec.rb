@@ -114,7 +114,6 @@ RSpec.describe ContactsController, type: :controller do
               expect(response).to render_template :new
             end
           end 
-        end
         
         describe 'PATCH #update' do
           before :each do
@@ -184,6 +183,105 @@ RSpec.describe ContactsController, type: :controller do
                   
                   expect(response).to redirect_to contacts_url
                 end
+              end
+            end
+          end
+
+
+            describe "guest access" do
+              before :each do
+                user = create(:user)
+                session[:user_id] = user.id
+              end
+              
+              describe 'Get #index' do
+                context 'with params[:letter]' do
+                  it "populates an array of contacts starting with the letter" do
+                    smith = create(:contact, lastname: 'Smith')
+                    jones = create(:contact, lastname: 'Jones')
+                    get :index, letter: "S"
+                    
+                    expect(assigns(:contacts)).to match_array([smith])
+                  end
+                  
+                  it "render the :index template" do
+                    get :index, letter: "S"
+                    
+                    expect(response).to render_template :index
+                  end
+                end
+                
+                
+                context 'without params[:letter]' do
+                  it "populates an array of all contacts" do
+                    smith = create(:contact, lastname: 'Smith')
+                    jones = create(:contact, lastname: 'Jones')
+                    get :index
+                    
+                    expect(assigns(:contacts)).to match_array([smith,jones])
+                  end
+                  
+                  it "renders the :index template" do
+                    get :index
+                    
+                    expect(response).to render_template :index
+                  end
+                end
+              end
+              
+              describe 'GET #show' do
+                it "assigns the requested contact to @contact" do
+                  contact = create(:contact)
+                  get :show, id: contact
+                  
+                  expect(assigns(:contact)).to eq contact
+                end
+                
+                it "renders the :show template" do
+                  contact = create(:contact)
+                  get :show, id: contact
+                  
+                  expect(response).to render_template :show
+                end
+              end
+              
+              describe 'GET #new' do
+                it "requires login" do
+                  get :new
+
+                  expect(response).to redirect_to login_url
+                end
+              end
+
+              describe 'GET #edit'
+              it "requires login" do
+                contact = create(:contact)
+                get :edit, id: contact
+
+                expect(response).to redirect_to login_url
+              end
+            end
+            describe "POST #create" do
+              it "requires login" do
+                post :create, id: create(:contact),
+                contact: attributes_for(:contact)
+
+                expect(response).to redirect_to login_url
+              end
+            end
+            describe 'PATCH #update' do
+              it "requires login" do
+                put :update, id: create(:contact),
+                contact: attributes_for(:contact)
+
+                expect(response).to redirect_to login_url
+              end
+            end
+            describe 'DELETE #destroy' do
+              it "requires login" do
+                delete :destroy, id: create(:contact)
+                
+                expect(response).to redirect_to login_url
               end
             end
           end
