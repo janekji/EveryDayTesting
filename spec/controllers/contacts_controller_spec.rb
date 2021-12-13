@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe ContactsController do
+RSpec.describe ContactsController, type: :controller do
   shared_examples_for 'public access to contacts' do
     describe 'GET #index' do
       context 'with params[:letter]' do
@@ -94,15 +94,13 @@ describe ContactsController do
       context "with valid attributes" do
         it "saves the new contact in the database" do
           expect{
-            post :create, contact: attributes_for(:contact,
-              phones_attributes: @phones)
+            post :create, contact: attributes_for(:contact, phones_attributes: @phones)
           }.to change(Contact, :count).by(1)
         end
 
         it "redirects to contacts#show" do
           post :create,
-            contact: attributes_for(:contact,
-              phones_attributes: @phones)
+            contact: attributes_for(:contact, phones_attributes: @phones)
           expect(response).to redirect_to contact_path(assigns[:contact])
         end
       end
@@ -110,14 +108,12 @@ describe ContactsController do
       context "with invalid attributes" do
         it "does not save the new contact in the database" do
           expect{
-            post :create,
-              contact: attributes_for(:invalid_contact)
+            post :create, contact: attributes_for(:invalid_contact)
           }.not_to change(Contact, :count)
         end
 
         it "re-renders the :new template" do
-          post :create,
-            contact: attributes_for(:invalid_contact)
+          post :create, contact: attributes_for(:invalid_contact)
           expect(response).to render_template :new
         end
       end
@@ -133,8 +129,7 @@ describe ContactsController do
 
       context "valid attributes" do
         it "locates the requested @contact" do
-          patch :update, id: @contact,
-            contact: attributes_for(:contact)
+          patch :update, id: @contact, contact: attributes_for(:contact)
           expect(assigns(:contact)).to eq @contact
         end
 
