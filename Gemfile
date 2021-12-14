@@ -46,6 +46,8 @@ group :development, :test do
   gem "rspec-rails", "~> 3.4"
   gem 'factory_bot_rails'
   gem 'pry-rails'
+  gem 'guard-rspec'
+  gem 'spring-commands-rspec', '~> 1.0.2'
 end
 
 group :test do
@@ -54,5 +56,6 @@ group :test do
   gem "database_cleaner", "~> 1.3.0"
   gem "launchy", "~> 2.4.2"
   gem "selenium-webdriver", "~> 2.43.0"
+  gem "guard-rspec"
 end
 

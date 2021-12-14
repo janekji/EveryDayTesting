@@ -49,7 +49,7 @@ RSpec.describe ContactsController, type: :controller do
 
   shared_examples 'full access to contacts' do
     describe 'GET #new' do
-      it "assigns a new Contact to @contact" do
+      it "assigns a new Contact to @contant" do
         get :new
         expect(assigns(:contact)).to be_a_new(Contact)
       end
