@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe NewsRelease, type: :model, focus: true do
+describe NewsRelease, type: :model do
   it "returns the formatted date and title as a string" do
     news_release = NewsRelease.new(released_on: '2013-07-31', title: 'BigCo hires a new CEO')
 
