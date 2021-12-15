@@ -1,6 +1,6 @@
 class NewsReleasesController < ApplicationController
   before_action :set_news_release, only: [:show, :edit, :update, :destroy]
-
+  before_action :authenticate, expect: [:index, :show]
   # GET /news_releases
   # GET /news_releases.json
   def index

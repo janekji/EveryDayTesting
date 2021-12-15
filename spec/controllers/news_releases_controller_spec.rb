@@ -23,7 +23,7 @@ require 'rails_helper'
 # removed from Rails core in Rails 5, but can be added back in via the
 # `rails-controller-testing` gem.
 
-RSpec.describe NewsReleasesController, type: :controller do
+RSpec.describe NewsReleasesController, type: :controller , focus: true do
 
   # This should return the minimal set of attributes required to create a valid
   # NewsRelease. As you add validations to NewsRelease, be sure to
@@ -58,9 +58,10 @@ RSpec.describe NewsReleasesController, type: :controller do
   end
 
   describe "GET #new" do
-    it "returns a success response" do
-      get :new, {}, valid_session
-      expect(response).to be_successful
+
+    it "requires login" do
+      get :new
+      expect(response).to require_login
     end
   end
 
@@ -73,24 +74,9 @@ RSpec.describe NewsReleasesController, type: :controller do
   end
 
   describe "POST #create" do
-    context "with valid params" do
-      it "creates a new NewsRelease" do
-        expect {
-          post :create, {:news_release => valid_attributes}, valid_session
-        }.to change(NewsRelease, :count).by(1)
-      end
-
-      it "redirects to the created news_release" do
-        post :create, {:news_release => valid_attributes}, valid_session
-        expect(response).to redirect_to(NewsRelease.last)
-      end
-    end
-
-    context "with invalid params" do
-      it "returns a success response (i.e. to display the 'new' template)" do
-        post :create, {:news_release => invalid_attributes}, valid_session
-        expect(response).to be_successful
-      end
+    it "requires login" do
+      post :create, news_release: attributes_for(:news_release)
+      expect(response).to require_login
     end
   end
 
